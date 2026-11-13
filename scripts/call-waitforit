@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#
+# Try wait-for-it script
+# link : https://github.com/vishnubob/wait-for-it
+#
+
+if [ -f "/tmp/wait-for-it.sh" ]; then
+    echo "script already exist: clear existing and download a fresh copy"
+    rm -f /tmp/wait-for-it.sh
+fi
+
+wget --quiet https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /tmp/wait-for-it.sh
+chmod +x /tmp/wait-for-it.sh
+/tmp/wait-for-it.sh -t 0 www.google.com:80 --quiet -- echo "google is up"
+exit 0

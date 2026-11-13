@@ -1,0 +1,31 @@
+% Default fixed font does not support bold face
+%\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+%\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+\definecolor{py_comment}{rgb}{0.12, 0.38, 0.18 }
+\definecolor{py_gray}{rgb}{0.5,0.5,0.5}
+\definecolor{py_keyword}{rgb}{0.37, 0.08, 0.25}
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\lstset{frame=tb,
+language=Python,
+otherkeywords={self}, 
+keywordstyle=\color{deepblue}\bfseries,
+emphstyle=\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},		
+aboveskip=3mm,
+belowskip=3mm,
+showstringspaces=false,
+columns=flexible,
+basicstyle={\small\ttfamily},
+numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+numbersep=5pt,                   % how far the line-numbers are from the code
+numberstyle=\tiny\color{py_gray}, % the style that is used for the line-numbers
+%commentstyle=\color{x_comment},
+breaklines=true,
+breakatwhitespace=true,
+tabsize=3
+}

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+replace_by_stars() {
+	str="$1"
+  result=""
+  for (( i=0; i<${#str}; i++ ))
+  do
+    result="${result}*"
+  done
+  echo "$result"
+}
+
+echo "-- begin --"
+text="helloworld"
+stared=$(replace_by_stars $text)
+echo "input  : '$text'"
+echo "output : '$stared'"
+echo "-- end --"
+exit 0

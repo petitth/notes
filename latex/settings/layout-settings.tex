@@ -1,0 +1,15 @@
+%--- display titles in table of contents until level 3 (subsection) ---
+\setcounter{tocdepth}{2}
+%--- add numbers for titles until level 3 ---
+\setcounter{secnumdepth}{3}
+%--- add dots for sections (table of contents) ---
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+%--- redefines layout of document ---
+\usepackage[a4paper,left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+\newcommand{\hsp}{\hspace{20pt}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+%--- defines the type of numerotation for sections (1, 2, 3) ---
+\renewcommand{\thesection}{\arabic{section}}

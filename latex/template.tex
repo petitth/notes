@@ -1,0 +1,83 @@
+\documentclass{article}
+% -------------------- packages --------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+%--- colors ---
+\usepackage{color}
+\usepackage{colortbl}
+%--- todo notes (inline by default) ---
+\usepackage{todonotes}
+%\usepackage[disable]{todonotes}
+\presetkeys{todonotes}{inline}{}
+%--- pictures ---
+\usepackage{graphicx}
+%--- lists (+ remove blank spaces) ---
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=0pt}
+\setlist[enumerate]{noitemsep, topsep=0pt}
+%--- configure links (table of contents) ---
+\usepackage{hyperref}
+\include{settings/hyperlink-settings}
+%--- custom layout ---
+\include{settings/layout-settings}
+% -------------------- begin document --------------------
+\begin{document}
+
+%------- front page -------
+\include{appendix/front-page}
+%------- white page --------
+\newpage\null\thispagestyle{empty}
+\newpage
+
+%------- thank or quote someone ------
+\vspace*{5cm}
+\textit{\LARGE This document is dedicated to my family.}
+\newpage
+
+%------- table of contents -----
+% requires 2 compilations to update
+\tableofcontents
+\newpage
+
+%------ content of the document --------
+\section{Introduction}
+
+\section{Title A}
+
+\subsection{Title A.1}
+
+\subsubsection{Title A.1.1}
+
+this info comes from a book \cite{AlgorithmsForClustering} \newline
+another info comes from a book \cite{IntroductionToDataMining} \newline
+this last info comes from a website \cite{PythonWebsite}
+
+\subsection{Title A.2}
+
+some content
+
+\section{Conclusion}
+
+some final word
+
+%------- bibliography ------------------------------
+% fix incorrect page number in table of contents
+\cleardoublepage
+% requires 2 compilations
+\addcontentsline{toc}{section}{Bibliographie} % display in table of contents
+\bibliographystyle{unsrt} % display items in order of apparence
+% only quoted items from the file will appear on bibliography
+\bibliography{appendix/bibliography}
+\newpage
+
+%------- appendixes --------------
+\appendix
+\section*{Appendix}
+\addcontentsline{toc}{section}{Appendix}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\subsection{Source code}
+\label{Source code}
+
+some code here
+\end{document}

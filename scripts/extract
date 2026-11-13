@@ -1,0 +1,54 @@
+#!/bin/bash
+
+#
+# Extract files from subfolders of a source folder to a target folder.
+# Each subfolder will then be removed.
+#
+
+source_folder=""
+target_folder=""
+
+# use ansi escape codes for colors
+NOCOLOR='\033[0m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+
+# internal field separator (for folders with blank spaces)
+IFS=$(echo -en "\n\b")
+
+
+extract_files() {
+    for dir_entry in `ls $1`
+    do
+        if [ -f "$1/$dir_entry" ] && [ "$1/$dir_entry" != "$source_folder/$dir_entry" ] ; then
+            # the entry is a file from a subfolder
+            echo -e "${CYAN}    - move $1/$dir_entry to ${target_folder} ${NOCOLOR}"
+            mv $1/$dir_entry ${target_folder}
+        fi
+
+        if [ -d "$1/$dir_entry" ] ; then
+            # the entry is a folder
+            echo -e "${MAGENTA} * folder : $1/$dir_entry ${NOCOLOR}"
+            extract_files "$1/$dir_entry"
+        fi
+    done
+
+    if [ "$1" != "${source_folder}" ] ; then
+      echo -e "${CYAN}    - remove folder $1 ${NOCOLOR}"
+      rm -rf "$1"
+    fi
+}
+
+
+# expect 2 parameters
+if [ $# -ne 2 ] ; then
+    echo "incorrect syntax : extract <source folder> <target folder>"
+    exit 1
+fi
+
+source_folder="$1"
+target_folder="$2"
+echo "--- begin extracting files to ${target_folder} ---"
+extract_files "${source_folder}"
+echo "--- done extracting files ---"
+exit 0

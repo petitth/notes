@@ -1,0 +1,139 @@
+% remark : the external dependencies of this template are the pictures and the theme
+\documentclass[compress]{beamer}
+\usepackage{etex} % fix error 'No room for a new dimen' when using a table
+\usetheme[navigation]{UMONS}
+
+% -------------------- packages --------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+%--- todo notes (inline by default) ---
+\usepackage{todonotes}
+%\usepackage[disable]{todonotes}
+\presetkeys{todonotes}{inline}{}
+%--- lists (+ remove blank spaces) ---
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=0pt}
+\setlist[enumerate]{noitemsep, topsep=0pt}
+%--- colors ---
+\usepackage{color}
+\usepackage{colortbl}
+%-- pifont symbols : use \ding{symbol-number} --
+\usepackage{pifont}
+%--- tables (special type) ---
+\usepackage{booktabs}
+%--- defines the type of numerotation for sections (1, 2, 3) ---
+\renewcommand{\thesection}{\arabic{section}}
+
+
+%-------- template of front slide ---------------
+\setbeamertemplate{title page}
+{
+  \begin{centering}
+    \begin{beamercolorbox}[sep=8pt,center]{title}
+      \\[1cm] \usebeamerfont{title}\inserttitle \\[0.5cm]
+    \end{beamercolorbox}    
+    
+    \begin{beamercolorbox}[sep=8pt,center]{author}
+      \usebeamerfont{author}writer : \insertauthor 
+    \end{beamercolorbox}    
+    \begin{beamercolorbox}[sep=8pt,center]{author}
+      \usebeamerfont{author}someone else : Bob Razovsky \\[1cm]
+    \end{beamercolorbox}        
+    
+    \begin{beamercolorbox}[sep=8pt,center]{date}
+      \\[0.1cm] \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}    
+
+  \end{centering}
+}
+
+%--------- variables of front slide ---------------
+\title[main title]{Long title}
+\author{John Smith}
+\date{June 2020}
+
+
+\begin{document}
+
+%-------------- front slide ----------------------
+\begin{frame}[plain] % 'plain' supprime les garnitures de la page de garde
+\begin{tikzpicture}[remember picture,overlay]  
+  \node [xshift=2cm,yshift=-1cm] at (current page.north west)
+    {\includegraphics[scale=0.2]{img/bob}};
+  \node [xshift=-1cm,yshift=-1cm] at (current page.north east)
+    {\includegraphics[scale=0.6]{img/minion}};
+\end{tikzpicture}
+\maketitle
+\end{frame}
+
+%---------------------- plan ----------------------
+\begin{frame}
+\frametitle{Plan}
+	\tableofcontents	
+\end{frame}
+
+%------------------- section A -----------------------
+\begin{frame}
+\frametitle{Section A}
+	\section{Section A}
+%	\usebeamerfont{subtitle}
+	\usebeamerfont{frametitle}
+	  	\begin{itemize}
+  			\item \quad\quad \ding{234} item 1 
+			\begin{itemize}
+				\item \quad\quad $\bullet$ subitem 1.1
+				\item \quad\quad $\bullet$ subitem 1.2
+				\item \quad\quad $\bullet$ subitem 1.3
+			\end{itemize}				  	
+  			\item \quad\quad \ding{234} item 2 \newline
+  			\item \quad\quad \ding{234} item 3 
+		\end{itemize}
+\end{frame}
+
+%------------------- section B -----------------------
+\begin{frame}
+\frametitle{Section B}
+	\section{Section B}
+	\usebeamerfont{subtitle}
+%	\usebeamerfont{frametitle}
+	  	\begin{itemize}
+  			\item \quad\quad \ding{234} item 1 \newline
+  			\item \quad\quad \ding{234} item 2 \newline
+  			\item \quad\quad \ding{234} item 3 \newline
+		\end{itemize}
+	\tiny{see this tiny comment}
+\end{frame}
+
+\begin{frame}
+\frametitle{Something else with 2 columns in section B}
+	\usebeamerfont{subtitle}
+	\begin{columns}[T] % contents are top vertically aligned
+	\begin{column}[T]{5cm}		
+		\begin{figure}[!h]
+		%\begin{center}
+			\includegraphics[scale=0.4]{img/minion}
+			\caption{an happy character}
+			\label{imgOfMinion}
+		%\end{center}
+		\end{figure}     
+	\end{column}
+	\begin{column}[T]{5cm}	
+		\usebeamerfont{subtitle}
+		$\bullet$ item 1 \newline 
+		$\bullet$ item 2 \newline
+		$\bullet$ item 3\newline
+		-- item 3.1 \newline  
+		-- item 3.2\newline
+	\end{column}	
+	\end{columns}	
+\end{frame}
+
+%-------- questions ----------
+\begin{frame}
+\frametitle{Questions}
+\begin{center}
+\includegraphics[scale=0.25]{img/questions}
+\end{center}
+\end{frame}
+
+\end{document}

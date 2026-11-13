@@ -1,0 +1,117 @@
+#!/bin/bash
+
+#
+# Scan a multi-pages document with scanimage.
+# By default, the output will be a pdf.
+# Call script with '-h' or '--help' to see available options.
+#
+# prerequisites
+# -------------
+# 1) install your scanner's driver
+# 2) install scripts dependencies :
+#       # convert pictures to pdf
+#       apt-get install imagemagick
+#       # merge pdfs
+#       apt-get install pdftk
+#       # compress pdf
+#       apt-get install ghostscript
+#
+
+# constants
+KEY_ESC=$'\e'
+MSG="<press any key to scan another page or ESC to stop>"
+
+# use ansi escape codes for colors
+NOCOLOR='\033[0m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+
+# scanning parameters
+output_folder="`pwd`"
+output_format="pdf"
+output_resolution=200 # minimum 100 dpi, default 200 dpi
+output_name="`date +%Y%m%d_%H%M%S`"
+output_prefix="scan"
+total_pages="1"
+scanning=true
+
+display_help() {
+	echo "Usage : scan [OPTION] ..."
+	echo " "
+	echo "This script uses scanimage to scan a document."
+	echo "If scanned document contains multiple pages, they will be merged into a multi-pages pdf."
+	echo " "
+	echo "Available options"
+	echo "-----------------"
+	echo "--format          output format (default is ${output_format}) : pnm|tiff|png|jpg|pdf"
+	echo "--folder          output folder (default is current folder)"
+	echo "--resolution      output resolution in dpi (default = ${output_resolution}) : 100|150|200|300"
+}
+
+read_parameters() {
+	for arg in "$@"
+	do
+		if [ "$arg" == "--help" ] || [ "$arg" == "-h" ]; then
+			  display_help
+			  exit 0
+		fi
+
+		key=$(echo $arg | cut -f1 -d=)
+		value=$(echo $arg | cut -f2 -d=)
+		case "$key" in
+			--format) output_format=${value} ;;
+			--folder) output_folder=${value} ;;
+			*)
+		esac
+	done
+}
+
+read_parameters "$@"
+echo "start scanning"
+echo -e "${CYAN}output folder : $output_folder ${NOCOLOR}"
+echo -e "${CYAN}output format : $output_format ${NOCOLOR}"
+echo -e "${CYAN}output resolution : $output_resolution dpi ${NOCOLOR}"
+
+while $scanning; do
+	current_file="${output_folder}/${output_prefix}_${output_name}_`printf "%03d" $total_pages`.${output_format}"
+	echo -e "${GREEN}scanning page $total_pages to $current_file ${NOCOLOR}"
+	if [ "${output_format}" = "pdf" ]; then
+			# create pdf from png with Image Magick (better compatibility)
+			temp_file="${output_folder}/${output_prefix}_${output_name}_`printf "%03d" $total_pages`.png"
+			scanimage --format="png" --resolution ${output_resolution} > "${temp_file}" 2>/dev/null
+			convert ${temp_file} ${current_file}
+			rm -f ${temp_file}
+		else
+			# standard scanning for pictures
+			scanimage --format="${output_format}" --resolution ${output_resolution} > "${current_file}" 2>/dev/null
+	fi
+	read -n1 -s -r -p "$MSG" key # let user choose to continue scanning or not
+	echo " "
+	if [ "$key" != "$KEY_ESC" ]; then
+		#echo "any key was pressed"
+		total_pages=$((total_pages + 1))
+	else
+		#echo "ESC key was pressed"
+		scanning=false
+	fi
+done
+
+if [ "${output_format}" = "pdf" ] && [ $total_pages -eq 1 ]; then
+	current_file="${output_folder}/${output_prefix}_${output_name}_`printf "%03d" $total_pages`.${output_format}"
+	compressed="${output_folder}/${output_prefix}_${output_name}_`printf "%03d" $total_pages`-gs.${output_format}"
+	echo -e "${GREEN}compress pdf to ${compressed} ${NOCOLOR}"
+	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=${compressed} ${current_file}
+fi
+
+if [ "${output_format}" = "pdf" ] && [ $total_pages -ne 1 ]; then
+	merged_file="${output_folder}/${output_prefix}_${output_name}.pdf"
+	echo -e "${GREEN}merging $total_pages pages into $merged_file ${NOCOLOR}"
+	pdftk ${output_folder}/${output_prefix}_${output_name}_*.${output_format} cat output ${merged_file}
+
+	compressed="${output_folder}/${output_prefix}_${output_name}-gs.pdf"
+	echo -e "${GREEN}compress pdf to ${compressed} ${NOCOLOR}"
+	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=${compressed} ${merged_file}
+fi
+
+echo -e "${GREEN}done scanning $total_pages page(s) ${NOCOLOR}"
+exit 0
